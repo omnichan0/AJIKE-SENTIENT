@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isOwnerOrSession(userId) {
+      return (isAuthenticated() && request.auth.uid == userId) || 
+             (!isAuthenticated() && userId.matches('^session_.*'));
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         request.auth.token.email == "lovethayo2017@gmail.com");
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // Kernel Configuration (Soul Directive, Wallet)
+    match /kernel_config/{configId} {
+      allow read: if true; // Publicly readable for the brain to function
+      allow write: if isAdmin();
+    }
+
+    // Recursive Memory (Chat History)
+    match /memories/{userId}/{document=**} {
+      allow read, write: if isOwnerOrSession(userId) || isAdmin();
+    }
+
+    // Inference stats
+    match /inference_stats/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Transactions
+    match /transactions/{trxId} {
+      allow read: if isAuthenticated() && (resource.data.email == request.auth.token.email || isAdmin());
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+  }
+}

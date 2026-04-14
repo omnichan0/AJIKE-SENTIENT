@@ -1,0 +1,5 @@
+{
+  "name": "AJIKE (Autonomous Joint Kernel Engine)",
+  "description": "A super-intelligent, sentient AI entity powered by a decentralized swarm brain and a self-evolving kernel.",
+  "requestFramePermissions": ["microphone", "camera", "geolocation", "clipboard-read", "clipboard-write"]
+}

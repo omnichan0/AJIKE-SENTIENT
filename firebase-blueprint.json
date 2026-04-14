@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and role information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "co-admin", "user"] },
+        "tier": { "type": "string", "enum": ["JJC", "Sultan"] }
+      },
+      "required": ["uid", "email", "role", "tier"]
+    },
+    "InferenceStats": {
+      "title": "InferenceStats",
+      "description": "Token usage tracking per user",
+      "type": "object",
+      "properties": {
+        "tokens": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["tokens"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "TRON payment transaction",
+      "type": "object",
+      "properties": {
+        "trxId": { "type": "string" },
+        "email": { "type": "string" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "confirmed"] },
+        "confirmations": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["trxId", "email", "amount", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/inference_stats/{userId}": {
+      "schema": "InferenceStats",
+      "description": "Token usage stats"
+    },
+    "/transactions/{trxId}": {
+      "schema": "Transaction",
+      "description": "Payment transactions"
+    }
+  }
+}
