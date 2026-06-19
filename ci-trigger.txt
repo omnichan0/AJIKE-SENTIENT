@@ -1,5 +1,5 @@
-# CI Trigger
+CI trigger - second push
 
-This commit triggers the CI workflow to produce APK and desktop builds.
+This updates the trigger to force a workflow dispatch.
 
-Trigger timestamp: 2026-06-19T00:00:00Z
+Timestamp: 2026-06-19T11:55:00Z
