@@ -1,0 +1,5 @@
+# CI Trigger
+
+This commit triggers the CI workflow to produce APK and desktop builds.
+
+Trigger timestamp: 2026-06-19T00:00:00Z
